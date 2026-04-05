@@ -1,0 +1,122 @@
+[
+    {
+        "type": "function",
+        "name": "get_full_report",
+        "description": "Fetch comprehensive financial data, metadata, and sector information for a specific stock ticker. Use this when a user asks for data on a specific stock. If the user asks for peer comparables but DOES NOT specify the peers, you MUST call this function first to find the stock's 'sector_subsector' string.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "symbol": {
+                    "type": "string",
+                    "description": "The stock ticker symbol (e.g., 'PTT', 'SCC')."
+                }
+            },
+            "required": ["symbol"]
+        }
+    },
+    {
+        "type": "function",
+        "name": "get_sector_index_links",
+        "description": "Fetch a master map of all SET sectors and subsectors with their corresponding URLs. Use this function when you need to identify the URL for a specific sector or subsector name. Call this BEFORE calling get_index_members.",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "type": "function",
+        "name": "get_index_members",
+        "description": "Get a list of stock tickers that belong to a specific sector or subsector. You MUST pass the exact URL obtained from the get_sector_index_links tool. Use this to generate a list of peers.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "index_url": {
+                    "type": "string",
+                    "description": "The full URL of the sector or subsector index (e.g., 'https://www.set.or.th/en/market/index/set/resourc/energ')."
+                }
+            },
+            "required": ["index_url"]
+        }
+    },
+    {
+        "type": "function",
+        "name": "trading_comparables",
+        "description": "Generate a peer comparison table for trading statistics including Price, Market Cap, P/E, P/BV, and Beta. Use this when the user asks to compare market valuation or trading stats.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "peers": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "A list of stock ticker symbols to compare (e.g., ['PTT', 'IRPC', 'TOP'])."
+                },
+                "year": {
+                    "type": "integer",
+                    "description": "The target year for the comparison (e.g., 2023). Defaults to the current year if unspecified."
+                }
+            },
+            "required": ["peers", "year"]
+        }
+    },
+    {
+        "type": "function",
+        "name": "profitability_comparables",
+        "description": "Generate a peer comparison table for profitability metrics including Total Revenues, EBITDA, Net Profit, Gross Margin, Net Margin, ROE, and ROA. Use this when the user asks to compare income, profits, or margins.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "peers": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "A list of stock ticker symbols to compare (e.g., ['PTT', 'IRPC', 'TOP'])."
+                },
+                "year": {
+                    "type": "integer",
+                    "description": "The target year for the comparison (e.g., 2023). Defaults to the current year if unspecified."
+                }
+            },
+            "required": ["peers", "year"]
+        }
+    },
+    {
+        "type": "function",
+        "name": "balance_sheet_comparables",
+        "description": "Generate a peer comparison table for balance sheet health, including Cash, Inventories, Assets, Liabilities, Equity, and D/E ratio. Use this when the user asks to compare financial position, debt, or assets.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "peers": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "A list of stock ticker symbols to compare (e.g., ['PTT', 'IRPC', 'TOP'])."
+                },
+                "year": {
+                    "type": "integer",
+                    "description": "The target year for the comparison (e.g., 2023). Defaults to the current year if unspecified."
+                }
+            },
+            "required": ["peers", "year"]
+        }
+    },
+    {
+        "type": "function",
+        "name": "dividend_comparables",
+        "description": "Generate a peer comparison table for dividend metrics including Dividend Yield, Payout Ratio, and Dividend Policy. Use this when the user asks to compare dividend returns or payout policies.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "peers": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "A list of stock ticker symbols to compare (e.g., ['PTT', 'IRPC', 'TOP'])."
+                },
+                "year": {
+                    "type": "integer",
+                    "description": "The target year for the comparison (e.g., 2023). Defaults to the current year if unspecified."
+                }
+            },
+            "required": ["peers", "year"]
+        }
+    }
+]
