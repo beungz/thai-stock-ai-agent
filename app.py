@@ -18,7 +18,7 @@ if "agent" not in st.session_state:
         # Initialize Tools and Agent
         tool_manager = SETAgentTools(scraper)
         st.session_state.agent = LocalFinancialAgent(
-            model_name="qwen2.5:7b", 
+            model_name="qwen2.5:14b-instruct", 
             tool_manager=tool_manager,
             registry_path="function_registry.json"
         )

@@ -22,7 +22,6 @@ The codebase is modularized to separate data extraction, state management, reaso
 3. **`SETAgentTools`:** A stateful wrapper that sits between the LLM and the scraper. It caches heavy web payloads in RAM and feeds only lightweight metadata to the LLM's context window.
 4. **`LocalFinancialAgent`:** The core agent loop. It manages the prompt history, injects the JSON tool registry, parses the LLM's `<action>` tags, and feeds observations back to the model.
 5. **`app.py`:** The Streamlit frontend that manages session state, renders the chat interface, and safely handles browser lifecycle events.
-<br>
 
 ***
 # Agent Flow<br>
@@ -32,36 +31,27 @@ The agent operates on a continuous Reason + Act paradigm:
 3. **Execute:** The Python framework intercepts the action, executes the corresponding scraper/comparator function, and caches the result.
 4. **Observe:** The execution result (the "Observation") is fed back to the LLM.
 5. **Synthesize:** The LLM evaluates the observation. If more data is needed, it loops back to step 2. If the data is sufficient, it generates the final Markdown response for the user.
-<br>
 
 ***
 # UI Design Considerations<br>
 * **Non-Blocking Execution:** Implemented Streamlit `st.status` containers to display the agent's intermediate thought processes and tool executions. This keeps the user informed during multi-second scraping tasks without cluttering the final chat history.
 * **Session Persistence:** Both the Chromedriver instance and the agent's memory are tied to Streamlit's `session_state`, ensuring the browser remains warm and ready across multiple chat interactions.
 * **Clean Markdown Rendering:** The UI is explicitly prompted to render raw DataFrame outputs as clean Markdown tables, ensuring financial data is highly legible.
-<br>
 
 ***
 # Design Choices<br>
 * **Custom Framework:** Built entirely from scratch in Python to maintain granular control over the reasoning loop, tool execution, and context window limits.
 * **Stateful Caching:** Implemented an in-memory caching system between the agent and the scraper. This prevents redundant web requests, drastically speeds up multi-step queries (like peer comparisons), and minimizes the risk of IP bans.
 * **Strict JSON Parsing:** Tool calls are isolated using custom XML tags (`<action>`) and strict JSON schemas, protecting the execution pipeline from LLM conversational hallucinations.
-<br>
 
 ***
 # Model Selection<br>
-
-[To update]<br>
-
 Deployed entirely locally using Ollama to ensure data privacy, and zero API costs<br>
-* **Agent Model:** `qwen2.5:7b` (or equivalent 7B/8B models like Llama 3.1). Selected for its state-of-the-art tool-calling capabilities and adherence to JSON schemas, while fitting comfortably within consumer GPU VRAM limits (8GB).<br>
-
-* **Evaluator Model (Judge):** `qwen2.5:32b`. Used strictly for the automated evaluation pipeline. Selected for its superior, near-GPT-4 reasoning capabilities and strict JSON output formatting.<br>
+* **Agent Model:** `qwen2.5:14b-instruct` (or equivalent 7B/8B models like Llama 3.1). Selected for its state-of-the-art tool-calling capabilities and adherence to JSON schemas, while fitting comfortably within GPU VRAM limits (16GB).<br>
 <br>
 
 ***
 # Tools<br>
-
 The agent determines when and how to use the following tools based on a dynamic JSON registry:
 * `get_full_report`: Fetches comprehensive financial tables and metadata for a specific stock ticker.
 * `get_sector_index_links`: Retrieves the master map of all SET sectors and subsectors.
@@ -70,16 +60,44 @@ The agent determines when and how to use the following tools based on a dynamic 
 * `profitability_comparables`: Compares Total Revenues, EBITDA, Net Profit, ROE, ROA, and Margins.
 * `balance_sheet_comparables`: Compares Cash, Assets, Liabilities, Equity, and D/E ratios.
 * `dividend_comparables`: Analyzes Dividend Yield, Payout Ratios, and extracts official Dividend Policies.
-<br>
 
 ***
 # Agent Performance Evaluation<br>
 
-[To update]<br>
+[To update with the following data: Before revising prompt and function registry
 
-The agent is continuously tested using a custom, two-tiered automated evaluation pipeline:
-1. **Trajectory (Routing) Evaluation:** Verifies the agent's logic. It tests whether the agent parsed the prompt correctly and selected the exact required sequence of tools (e.g., executing peer discovery tools before calling comparison tables).
-2. **Output (Generation) Evaluation:** Utilizes an **LLM-as-a-Judge** framework. The 32B evaluator model cross-references the agent's final answer against the raw, live-scraped ground truth data to grade it on Factuality (zero hallucinations), Completeness, and Format Adherence (e.g., proper Markdown tables).
+"qwen2.5:7b"
+26/50 (52.0%)
+
+"gemma2:9b"
+14/50 (28.0%)
+
+"mistral-nemo:12b"
+14/50 (28.0%)
+
+"qwen2.5-coder:14b"
+23/50 (46.0%)
+
+"qwen2.5:14b-instruct"
+35/50 (70.0%)
+
+
+After revising prompt and function registry
+
+"qwen2.5:7b"
+
+
+"gemma2:9b"
+
+
+"mistral-nemo:12b"
+
+
+"qwen2.5-coder:14b"
+
+
+"qwen2.5:14b-instruct"
+38/50 (76.0%)]<br>
 <br>
 
 ***
@@ -101,6 +119,7 @@ selenium==4.41.0
 undetected-chromedriver==3.5.5
 ollama==0.6.1
 streamlit==1.45.1
+tabulate==0.10.0
 ```
 <br>
 
