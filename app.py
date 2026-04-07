@@ -4,7 +4,7 @@ from set_agent import SETStockData, SETAgentTools, LocalFinancialAgent
 
 # Streamlit App Configuration
 st.set_page_config(page_title="SET AI Agent", layout="wide")
-st.title("Thailand's Stock AI Agent")
+st.title("Thai Stock AI Agent")
 
 # Initialize Agent and Chat History in Session State
 if "agent" not in st.session_state:
@@ -34,7 +34,7 @@ for msg in st.session_state.chat_history:
         st.markdown(msg["content"])
 
 # Chat Input & Execution
-if prompt := st.chat_input("Example: Compare the profitability of PTT against its peers for 2023"):
+if prompt := st.chat_input("Example: Compare the profitability of PTTGC against IRPC and TOP for 2024"):
     
     # Show User Message
     st.session_state.chat_history.append({"role": "user", "content": prompt, "is_final": True})
