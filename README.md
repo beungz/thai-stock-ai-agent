@@ -64,24 +64,25 @@ The agent determines when and how to use the following tools based on a dynamic 
 ***
 # Agent Performance Evaluation<br>
 
-[To update with the following data:
-Before revising prompt and function registry
-"qwen2.5:7b": 26/50 (52.0%)
-"gemma2:9b": 14/50 (28.0%)
-"mistral-nemo:12b": 14/50 (28.0%)
-"qwen2.5-coder:14b": 23/50 (46.0%)
-"qwen2.5:14b-instruct": 35/50 (70.0%)
+[To update]<br>
 
-After revising prompt and function registry
-"qwen2.5:7b": 42/50 (84.0%)
-"gemma2:9b": 25/50 (50.0%)
-"mistral-nemo:12b": 9/50 (18.0%)
-"qwen2.5-coder:14b": 31/50 (62.0%)
-"qwen2.5:14b-instruct": 39/50 (78.0%)
+The agent's routing logic and parameter extraction were rigorously tested against a 50-question evaluation dataset. The tests span five levels of difficulty, ranging from simple single-tool retrieval to complex, multi-step peer discovery loops.
 
-And human evaluation]
-<br>
-<br>
+To optimize performance, the system prompt and JSON function registry were revised to strictly enforce autonomous execution (preventing the agent from pausing to ask the user for permission) and to clarify list/array handling for multi-year queries.
+
+The table below summarizes the **Trajectory Evaluation Score** (whether the agent successfully called the correct sequence of tools with the exact required arguments) before and after these prompt engineering revisions.
+
+| **Model** | **Trajectory Score (Before Revision)** | **Trajectory Score (After Revision)** | **Human Evaluation Result (Correctness)** | 
+| :--- | :---: | :---: | :---: |
+| **`qwen2.5:7b`** | 26/50 (52.0%) | 42/50 (84.0%) |  | 
+| **`gemma2:9b`** | 14/50 (28.0%) | 25/50 (50.0%) |  | 
+| **`mistral-nemo:12b`** | 14/50 (28.0%) | 9/50 (18.0%) |  | 
+| **`qwen2.5-coder:14b`** | 23/50 (46.0%) | 31/50 (62.0%) |  | 
+| **`qwen2.5:14b-instruct`** | 35/50 (70.0%) | 39/50 (78.0%) |  | 
+
+The `qwen2.5` architecture demonstrated superior obedience to the ReAct `<action>` XML formatting and JSON schemas compared to other generalist models.<br>
+
+[To update human evaluation result]<br>
 
 ***
 # Ethics statement<br>
