@@ -1,3 +1,4 @@
+import datetime
 import json
 import os
 import re
@@ -154,10 +155,22 @@ def evaluate_trajectory_and_args(agent_messages, test_case):
 
 
 
-def save_manual_evaluation_report(results, agent_model, filename="manual_evaluation_report.md"):
+def save_manual_evaluation_report(results, agent_model, filename=None):
     """Generates a clean, highly readable Markdown file for manual human review."""
 
-    with open(filename, "w", encoding="utf-8") as f:
+    # Create a folder to store the reports if it doesn't exist
+    report_dir = "agent_result_report"
+    os.makedirs(report_dir, exist_ok=True)
+
+    # Auto-generate a smart filename (Model Name + Timestamp) so you don't overwrite old tests
+    if filename is None:
+        safe_model_name = agent_model.replace(':', '_').replace('-', '_')
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"eval_{safe_model_name}_{timestamp}.md"
+    filepath = os.path.join(report_dir, filename)
+
+    # Write the file into the folder
+    with open(filepath, "w", encoding="utf-8") as f:
         f.write(f"# Manual Agent Evaluation Report\n")
         f.write(f"**Agent Model:** `{agent_model}`\n")
         f.write(f"**Total Tests:** {len(results)}\n\n")
@@ -179,7 +192,8 @@ def save_manual_evaluation_report(results, agent_model, filename="manual_evaluat
             
             f.write("\n---\n\n")
             
-    print(f"\nManual evaluation report successfully saved to: {os.path.abspath(filename)}")
+    print(f"\nManual evaluation report successfully saved to: {os.path.abspath(filepath)}")
+
 
 
 def run_trajectory_evaluation(agent_model="qwen2.5-coder:14b"):
@@ -248,7 +262,7 @@ def run_trajectory_evaluation(agent_model="qwen2.5-coder:14b"):
         scraper.close()
 
     # Generate the Markdown Report
-    save_manual_evaluation_report(manual_eval_data, agent_model, filename=f"manual_evaluation_report_{agent_model.replace(':', '_')}.md")
+    save_manual_evaluation_report(manual_eval_data, agent_model)
 
     # Final Terminal Report
     print("\n" + "="*50)

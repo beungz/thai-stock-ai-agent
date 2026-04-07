@@ -64,40 +64,23 @@ The agent determines when and how to use the following tools based on a dynamic 
 ***
 # Agent Performance Evaluation<br>
 
-[To update with the following data: Before revising prompt and function registry
-
-"qwen2.5:7b"
-26/50 (52.0%)
-
-"gemma2:9b"
-14/50 (28.0%)
-
-"mistral-nemo:12b"
-14/50 (28.0%)
-
-"qwen2.5-coder:14b"
-23/50 (46.0%)
-
-"qwen2.5:14b-instruct"
-35/50 (70.0%)
-
+[To update with the following data:
+Before revising prompt and function registry
+"qwen2.5:7b": 26/50 (52.0%)
+"gemma2:9b": 14/50 (28.0%)
+"mistral-nemo:12b": 14/50 (28.0%)
+"qwen2.5-coder:14b": 23/50 (46.0%)
+"qwen2.5:14b-instruct": 35/50 (70.0%)
 
 After revising prompt and function registry
+"qwen2.5:7b": 42/50 (84.0%)
+"gemma2:9b": 25/50 (50.0%)
+"mistral-nemo:12b": 9/50 (18.0%)
+"qwen2.5-coder:14b": 31/50 (62.0%)
+"qwen2.5:14b-instruct": 39/50 (78.0%)
 
-"qwen2.5:7b"
-
-
-"gemma2:9b"
-
-
-"mistral-nemo:12b"
-
-
-"qwen2.5-coder:14b"
-
-
-"qwen2.5:14b-instruct"
-38/50 (76.0%)]<br>
+And human evaluation]
+<br>
 <br>
 
 ***
