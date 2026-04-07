@@ -1,7 +1,7 @@
-# AIPI 590: Assignment 3: Thailand's Stock AI Agent
+# AIPI 590: Assignment 3: Thai Stock AI Agent
 ### **Author**: Matana Pornluanprasert
 
-The AI agent is designed to interact with a suite of tools for share data retrieval, individual Thai stock analysis and comparables, enabling it to answer questions about specified stocks based on current or historical data. The tools allows the agent to perform various financial analyses and comparisons, including trading stats, profitability, balance sheet, and dividends. The project includes a Streamlit interface for user interaction and is evaluated on its ability to provide accurate and insightful answers to financial queries.<br>
+The AI agent is designed to interact with a suite of tools for stock data retrieval, individual Thai stock analysis and comparables, enabling it to answer questions about specified stocks based on current or historical data. The tools allow the agent to perform various financial data retrieval and comparisons, including trading stats, profitability, balance sheet, and dividends. The project includes a Streamlit interface for user interaction and is evaluated on its ability to provide accurate answers to financial and investment queries.<br>
 
 
 ***
@@ -11,7 +11,7 @@ To provide a fully autonomous, privacy-first financial assistant capable of brid
 
 ***
 # Data Source<br>
-All data comes from the official Stock Exchage of Thailand. Web scraping is used to collect the data.<br>
+All data comes from the official Stock Exchange of Thailand. Web scraping is used to collect the data.<br>
 https://www.set.or.th/<br>
 
 ***
@@ -46,8 +46,14 @@ The agent operates on a continuous Reason + Act paradigm:
 
 ***
 # Model Selection<br>
-Deployed entirely locally using Ollama to ensure data privacy, and zero API costs<br>
-* **Agent Model:** `qwen2.5:14b-instruct` (or equivalent 7B/8B models like Llama 3.1). Selected for its state-of-the-art tool-calling capabilities and adherence to JSON schemas, while fitting comfortably within GPU VRAM limits (16GB).<br>
+Deployed entirely locally using Ollama to ensure data privacy and zero API costs. To find the optimal balance of reasoning, tool-calling accuracy, and hardware efficiency (fitting comfortably within a 16GB GPU VRAM limit), five state-of-the-art open-weight models were evaluated:<br>
+
+* **`qwen2.5:14b-instruct` (Champion Model):** Selected as the primary agent for its exceptional balance of conversational roleplay (ReAct framework) and strict adherence to complex JSON schemas and XML `<action>` tags.<br>
+* **`qwen2.5-coder:14b`:** Evaluated for its elite JSON and coding capabilities, though it proved too literal for the conversational flow required by the ReAct prompting structure.<br>
+* **`qwen2.5:7b`:** Tested as a lightweight, high-speed baseline to validate the efficiency and baseline intelligence of the underlying Qwen 2.5 architecture.<br>
+* **`gemma2:9b`:** Included as a highly efficient generalist model to test its advanced reasoning capabilities within a compact, sub-10B parameter count.<br>
+* **`mistral-nemo:12b`:** A robust benchmark model with a large context window, evaluated to compare standard generalist reasoning against Qwen's specialized tool-calling.<br>
+
 <br>
 
 ***
@@ -64,8 +70,6 @@ The agent determines when and how to use the following tools based on a dynamic 
 ***
 # Agent Performance Evaluation<br>
 
-[To update]<br>
-
 The agent's routing logic and parameter extraction were rigorously tested against a 50-question evaluation dataset. The tests span five levels of difficulty, ranging from simple single-tool retrieval to complex, multi-step peer discovery loops.
 
 To optimize performance, the system prompt and JSON function registry were revised to strictly enforce autonomous execution (preventing the agent from pausing to ask the user for permission) and to clarify list/array handling for multi-year queries.
@@ -74,19 +78,25 @@ The table below summarizes the **Trajectory Evaluation Score** (whether the agen
 
 | **Model** | **Trajectory Score (Before Revision)** | **Trajectory Score (After Revision)** | **Human Evaluation Result (Correctness)** | 
 | :--- | :---: | :---: | :---: |
-| **`qwen2.5:7b`** | 26/50 (52.0%) | 42/50 (84.0%) |  | 
-| **`gemma2:9b`** | 14/50 (28.0%) | 25/50 (50.0%) |  | 
-| **`mistral-nemo:12b`** | 14/50 (28.0%) | 9/50 (18.0%) |  | 
-| **`qwen2.5-coder:14b`** | 23/50 (46.0%) | 31/50 (62.0%) |  | 
-| **`qwen2.5:14b-instruct`** | 35/50 (70.0%) | 39/50 (78.0%) |  | 
+| **`gemma2:9b`** | 14/50 (28.0%) | 25/50 (50.0%) | 7/50 (14.0%) | 
+| **`mistral-nemo:12b`** | 14/50 (28.0%) | 9/50 (18.0%) | 3/50 (6.0%) | 
+| **`qwen2.5:7b`** | 26/50 (52.0%) | 42/50 (84.0%) | 24/50 (48.0%) | 
+| **`qwen2.5-coder:14b`** | 23/50 (46.0%) | 31/50 (62.0%) | 18/50 (36.0%) | 
+| **`qwen2.5:14b-instruct`** | 35/50 (70.0%) | 39/50 (78.0%) | 32/50 (64.0%) |
 
 The `qwen2.5` architecture demonstrated superior obedience to the ReAct `<action>` XML formatting and JSON schemas compared to other generalist models.<br>
 
-[To update human evaluation result]<br>
+**Key Observations from the Manual Evaluation**:
+* **Unit Hallucinations (Test 21, 31):** Several models failed because they dropped the "million" designation (e.g., stating `528,531 THB` instead of `528,531 million THB` or inventing abbreviations like `B THB` for billion instead of million). 
+* **Premature Stopping (Tests 48-50):** The agents often successfully executed the tools, found the list of peers, but then ended their turn with *"Here is the list. Would you like me to generate a table?"* instead of just outputting the table directly.
+* **`qwen2.5:14b-instruct`** maintained its lead as the strongest model, not only in routing tools correctly but also in surfacing the final numbers cleanly to the user.
+
+
+<br>
 
 ***
 # Ethics statement<br>
-This project is intended for research and educational purposes in large language model and intelligent agent development. All data collection and deployment are conducted with respect for privacy and copyright. Care has been taken to avoid misuse of the model and to ensure responsible use of the technology, particularly in relation to surveilance, personal data, and public safety.<br>
+This project is intended for research and educational purposes in large language model and intelligent agent development. All data collection and deployment are conducted with respect for privacy and copyright. Care has been taken to avoid misuse of the model and to ensure responsible use of the technology, particularly in relation to surveillance, personal data, and public safety.<br>
 <br>
 
 
@@ -105,18 +115,15 @@ ollama==0.6.1
 streamlit==1.45.1
 tabulate==0.10.0
 ```
-<br>
 
 ### **How to run the code**:<br>
 ***
 
-To run the agent with streamlit interface:<br>
+To run the agent with streamlit interface, type the following in the terminal<br>
 
 ```
 streamlit run app.py
 ```
-
-<br>
-
+Then the interface will be shown in local web browser. User can type in a question and get answer responded by the agent.
 
 ***
