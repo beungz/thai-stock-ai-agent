@@ -537,27 +537,21 @@ class LocalFinancialAgent:
         self._init_system_prompt()
 
     def _init_system_prompt(self):
-        """Constructs the system prompt for the LLM, embedding the tool definitions from the JSON registry. The prompt instructs the LLM on how to use the tools, including the format for calling tools and the rules for interaction."""
         schema_string = json.dumps(self.registry_schema, indent=2)
-        
         prompt = f"""You are an expert AI Financial Analyst specializing in the Stock Exchange of Thailand (SET). 
-You must analyze user requests and use the provided tools to fetch data before answering.
-
 You have access to the following tools defined in JSON schema:
-<tools>
-{schema_string}
-</tools>
+<tools>\n{schema_string}\n</tools>
 
 To use a tool, you MUST output a JSON block wrapped in <action> tags, exactly like this:
 <action>
 {{"name": "tool_name", "arguments": {{"arg1": "value1"}}}}
 </action>
 
-Rules:
-1. Only call ONE tool at a time. 
-2. Wait for the Observation before proceeding.
-3. If you are comparing peers, output the markdown table provided in the Observation.
-4. When you have all the necessary information, provide a final analytical response to the user without <action> tags.
+CRITICAL RULES:
+1. Call ONLY ONE tool at a time and wait for the Observation.
+2. NEVER ask the user for permission to proceed. If the user asks to compare a stock to its peers, you MUST autonomously find the peers AND generate the comparison tables without stopping.
+3. NEVER hallucinate arguments. Only use the exact parameters defined in the schema.
+4. If the user asks for multiple years, you must call the comparables tool multiple times, once for each individual year.
 """
         self.messages.append({"role": "system", "content": prompt})
 

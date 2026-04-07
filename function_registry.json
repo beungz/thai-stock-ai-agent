@@ -51,9 +51,9 @@
                     "items": {"type": "string"},
                     "description": "A list of stock ticker symbols to compare (e.g., ['PTT', 'IRPC', 'TOP'])."
                 },
-                "year": {
-                    "type": "integer",
-                    "description": "The target year for the comparison (e.g., 2023). Defaults to the current year if unspecified."
+                "year": { 
+                    "type": "integer", 
+                    "description": "The target year. If the user asks for a range of years (e.g. 2023 to 2025), you MUST call this tool sequentially for EACH year separately. Do not combine them." 
                 }
             },
             "required": ["peers", "year"]
@@ -71,9 +71,9 @@
                     "items": {"type": "string"},
                     "description": "A list of stock ticker symbols to compare (e.g., ['PTT', 'IRPC', 'TOP'])."
                 },
-                "year": {
-                    "type": "integer",
-                    "description": "The target year for the comparison (e.g., 2023). Defaults to the current year if unspecified."
+                "year": { 
+                    "type": "integer", 
+                    "description": "The target year. If the user asks for a range of years (e.g. 2023 to 2025), you MUST call this tool sequentially for EACH year separately. Do not combine them." 
                 }
             },
             "required": ["peers", "year"]
@@ -91,9 +91,9 @@
                     "items": {"type": "string"},
                     "description": "A list of stock ticker symbols to compare (e.g., ['PTT', 'IRPC', 'TOP'])."
                 },
-                "year": {
-                    "type": "integer",
-                    "description": "The target year for the comparison (e.g., 2023). Defaults to the current year if unspecified."
+                "year": { 
+                    "type": "integer", 
+                    "description": "The target year. If the user asks for a range of years (e.g. 2023 to 2025), you MUST call this tool sequentially for EACH year separately. Do not combine them." 
                 }
             },
             "required": ["peers", "year"]
@@ -111,9 +111,9 @@
                     "items": {"type": "string"},
                     "description": "A list of stock ticker symbols to compare (e.g., ['PTT', 'IRPC', 'TOP'])."
                 },
-                "year": {
-                    "type": "integer",
-                    "description": "The target year for the comparison (e.g., 2023). Defaults to the current year if unspecified."
+                "year": { 
+                    "type": "integer", 
+                    "description": "The target year. If the user asks for a range of years (e.g. 2023 to 2025), you MUST call this tool sequentially for EACH year separately. Do not combine them." 
                 }
             },
             "required": ["peers", "year"]
